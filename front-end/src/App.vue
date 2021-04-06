@@ -8,13 +8,9 @@
   </div>
   <div class="content">
     <router-view />
-    <section class="gym-gallery">
-    <div class="image" v-for="gym in gyms" :key="gym.id">
-      <h2>{{gym.name}}</h2>
-    </div>
-    </section>
   </div>
   <div class="footer">
+    <a href="https://github.com/cbrewerton/creativeproject4">GitHub</a>
   </div>
 </div>
 </template>

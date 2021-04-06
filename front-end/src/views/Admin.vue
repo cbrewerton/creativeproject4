@@ -8,22 +8,31 @@
       <div class="form">
         <input v-model="location" placeholder="Location">
         <p></p>
+        <input v-model="trainers" placeholder="Trainers">
+        <p></p>
+        <input v-model="amenities" placeholder="Amenities">
+        <p></p>
         <button @click="upload">Add Gym</button>
-      </div>
-      <div class="upload" v-if="addGym">
-        <h2>{{addGym.location}}</h2>
       </div>
     </div>
     <div class="heading">
       <h2>Edit/Delete a Gym</h2>
     </div>
     <div class="edit">
-      <div class="upload" v-if="findGym">
-        <input v-model="findGym.title">
-      </div>
-      <div class="actions" v-if="findGym">
-        <button @click="deleteItem(findGym)">Delete</button>
-        <button @click="editItem(findGym)">Edit</button>
+      <div class="actions" v-for="gym in gyms" :key="gym.id">
+        <h2>{{gym.location}}</h2>
+        <input v-model="location" placeholder="New Location">
+        <button @click="editLocation(gym)">Edit Location</button>
+        <br>
+        <h5>{{gym.trainers}}</h5>
+        <input v-model="trainers" placeholder="New Trainers">
+        <button @click="editTrainers(gym)">Edit Trainers</button>
+        <br>
+        <h5>{{gym.amenities}}</h5>
+        <input v-model="amenities" placeholder="New Amenities">
+        <button @click="editAmenities(gym)">Edit Amenities</button>
+        <br>
+        <button @click="deleteGym(gym)">Delete Gym</button>
       </div>
     </div>
 </div>
@@ -35,13 +44,11 @@ export default {
   name: 'Admin',
   data(){
     return{
+      gyms: [],
       location: "",
       amenities: "",
       trainers: "",
       addGym: null,
-      items: [],
-      findGym: null,
-      findLocation: null
     }
   },
   computed: {
@@ -56,7 +63,6 @@ export default {
           location: this.location,
           trainers: this.trainers,
           amenities: this.amenities,
-          path: response.data.path
         });
         this.addGym = response.data;
       } catch (error) {
@@ -72,27 +78,43 @@ export default {
         console.log(error);
       }
     },
-    selectGym(gym) {
-      this.findLocation = "";
-      this.findGym = gym;
-    },
     async deleteGym(gym) {
       try {
         await axios.delete("/api/gyms/" + gym._id);
-        this.findGym = null;
-        this.getItems();
+        this.getGyms();
         return true;
       } catch (error) {
         console.log(error);
       }
     },
-    async editGym(gym) {
+    async editLocation(gym) {
       try {
         await axios.put("/api/gyms/" + gym._id, {
-          location: this.findGym.location,
+          location: this.gym.location,
         });
-        this.findGym = null;
-        this.getItems();
+        this.getGyms();
+        return true;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async editTrainers(gym) {
+      try {
+        await axios.put("/api/gyms/" + gym._id, {
+          trainers: this.gym.trainers,
+        });
+        this.getGyms();
+        return true;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async editAmenities(gym) {
+      try {
+        await axios.put("/api/gyms/" + gym._id, {
+          amenities: this.gym.amenities,
+        });
+        this.getGyms();
         return true;
       } catch (error) {
         console.log(error);
@@ -125,8 +147,19 @@ input {
   align-content: center;
 }
 
-/* Uploaded images */
 .upload h2 {
   margin: 0px;
 }
+
+h5, h2{
+  display: inline-block;
+  margin: 5px;
+}
+
+.actions input {
+  display: inline-block;
+  margin: 5px;
+  font-size: 1em;
+}
+
 </style>

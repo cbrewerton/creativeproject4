@@ -1,10 +1,19 @@
 <template>
 <div class="home">
   <div class="home">
-  <p>Click on a specific gym for some info about certain gyms, its trainers, and amenities in the Utah Valley area!</p>
+  <p>Not sure which gym to join in the Utah area?</p>
+  <p>Check a specific gym for some info about certain gyms, its trainers, and amenities in the Utah Valley area!</p>
   <section class="image-gallery">
-    <div v-for="gym in gyms" :key="gym.id">
-      <router-link :to="`gym/${gym.gymid}`">{{ gym.location }}</router-link>
+    <div class="image" v-for="gym in gyms" :key="gym.id">
+      <h1>{{ gym.location }}</h1>
+      <ul>
+        <li>
+      <h1>Trainers: {{ gym.trainers }}</h1>
+        </li>
+        <li>
+      <h1>Amenities: {{ gym.amenities }}</h1>
+        </li>
+      </ul>
     </div>
   </section>
 </div>
